@@ -1,6 +1,8 @@
 # Bitwarden Vault Analyser 🔐
 
-![Bitwarden Vault Analyser Logo](images/00-logo.png)
+<div align="center">
+  <img src="images/00-logo.png" alt="Bitwarden Vault Analyser Logo" width="300" />
+</div>
 
 [![Python Version](https://img.shields.io/badge/Python-3.8+-4B8BBE.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![Flask Version](https://img.shields.io/badge/Flask-2.0+-000000.svg?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
