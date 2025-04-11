@@ -1,0 +1,263 @@
+{
+  "encrypted": false,
+  "folders": [
+    {
+      "id": "f1b45908-5c0a-4f15-88de-4b531a22df58",
+      "name": "Pessoal"
+    },
+    {
+      "id": "a9d742cb-7f9a-4d42-8f1a-3181a976def2",
+      "name": "Trabalho"
+    },
+    {
+      "id": "c4e7b4d3-9a72-4f2e-b8d9-1d5f7a3e9c8b",
+      "name": "Financeiro"
+    }
+  ],
+  "items": [
+    {
+      "id": "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+      "organizationId": null,
+      "folderId": "f1b45908-5c0a-4f15-88de-4b531a22df58",
+      "type": 1,
+      "name": "Google",
+      "notes": "Conta principal do Gmail",
+      "favorite": true,
+      "login": {
+        "uris": [
+          {
+            "match": null,
+            "uri": "https://google.com"
+          },
+          {
+            "match": null,
+            "uri": "https://mail.google.com"
+          }
+        ],
+        "username": "usuario@gmail.com",
+        "password": "Senha@Forte123",
+        "totp": "otpauth://totp/Google:usuario@gmail.com?secret=ABCDEFGHIJKLMNOP&issuer=Google"
+      },
+      "collectionIds": null,
+      "revisionDate": "2025-01-15T08:23:42.532Z",
+      "creationDate": "2023-03-05T14:12:33.821Z",
+      "deletedDate": null
+    },
+    {
+      "id": "2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e",
+      "organizationId": null,
+      "folderId": "f1b45908-5c0a-4f15-88de-4b531a22df58",
+      "type": 1,
+      "name": "Facebook",
+      "notes": null,
+      "favorite": false,
+      "login": {
+        "uris": [
+          {
+            "match": null,
+            "uri": "https://facebook.com"
+          }
+        ],
+        "username": "usuario@gmail.com",
+        "password": "Senha@Forte123",
+        "totp": null
+      },
+      "collectionIds": null,
+      "revisionDate": "2024-12-10T18:45:22.135Z",
+      "creationDate": "2023-05-12T09:33:17.452Z",
+      "deletedDate": null
+    },
+    {
+      "id": "3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f",
+      "organizationId": null,
+      "folderId": "a9d742cb-7f9a-4d42-8f1a-3181a976def2",
+      "type": 1,
+      "name": "LinkedIn",
+      "notes": "Conta profissional",
+      "favorite": true,
+      "login": {
+        "uris": [
+          {
+            "match": null,
+            "uri": "https://linkedin.com"
+          }
+        ],
+        "username": "usuario@empresa.com.br",
+        "password": "ProfissionalSeguro2024!",
+        "totp": null
+      },
+      "collectionIds": null,
+      "revisionDate": "2025-02-20T11:37:19.843Z",
+      "creationDate": "2024-01-17T15:28:45.712Z",
+      "deletedDate": null
+    },
+    {
+      "id": "4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a",
+      "organizationId": null,
+      "folderId": "c4e7b4d3-9a72-4f2e-b8d9-1d5f7a3e9c8b",
+      "type": 1,
+      "name": "Banco XYZ",
+      "notes": "Conta corrente principal",
+      "favorite": true,
+      "login": {
+        "uris": [
+          {
+            "match": null,
+            "uri": "https://bancoxyz.com.br"
+          }
+        ],
+        "username": "12345678900",
+        "password": "senhaForteComNumeros9876!",
+        "totp": "otpauth://totp/Banco:12345678900?secret=QRSTUVWXYZ123456&issuer=BancoXYZ"
+      },
+      "collectionIds": null,
+      "revisionDate": "2025-03-01T07:15:33.987Z",
+      "creationDate": "2023-09-22T16:42:08.321Z",
+      "deletedDate": null
+    },
+    {
+      "id": "5e6f7a8b-9c0d-1e2f-3a4b-5c6d7e8f9a0b",
+      "organizationId": null,
+      "folderId": null,
+      "type": 1,
+      "name": "Amazon",
+      "notes": "Conta de compras",
+      "favorite": false,
+      "login": {
+        "uris": [
+          {
+            "match": null,
+            "uri": "https://amazon.com.br"
+          }
+        ],
+        "username": "usuario@gmail.com",
+        "password": "ComprasSeguras456!",
+        "totp": null
+      },
+      "collectionIds": null,
+      "revisionDate": "2024-11-05T14:22:55.678Z",
+      "creationDate": "2023-08-15T10:18:27.543Z",
+      "deletedDate": null
+    },
+    {
+      "id": "6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c",
+      "organizationId": null,
+      "folderId": "a9d742cb-7f9a-4d42-8f1a-3181a976def2",
+      "type": 1,
+      "name": "Sistema Empresarial",
+      "notes": "Login para o sistema interno da empresa",
+      "favorite": false,
+      "login": {
+        "uris": [
+          {
+            "match": null,
+            "uri": "https://sistema.empresa.com.br"
+          }
+        ],
+        "username": "joao.silva",
+        "password": "trabalho2025seguro",
+        "totp": "otpauth://totp/Sistema:joao.silva?secret=ABCDEF123456&issuer=SistemaEmpresa"
+      },
+      "collectionIds": null,
+      "revisionDate": "2025-03-25T09:12:44.321Z",
+      "creationDate": "2024-01-10T08:45:32.765Z",
+      "deletedDate": null
+    },
+    {
+      "id": "7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d",
+      "organizationId": null,
+      "folderId": "c4e7b4d3-9a72-4f2e-b8d9-1d5f7a3e9c8b",
+      "type": 1,
+      "name": "Nubank",
+      "notes": "Cartão de crédito",
+      "favorite": true,
+      "login": {
+        "uris": [
+          {
+            "match": null,
+            "uri": "https://nubank.com.br"
+          }
+        ],
+        "username": "usuario@gmail.com",
+        "password": "Nu123Seguro!456",
+        "totp": "otpauth://totp/Nubank:usuario@gmail.com?secret=NU123456BANK&issuer=Nubank"
+      },
+      "collectionIds": null,
+      "revisionDate": "2025-02-18T16:54:22.876Z",
+      "creationDate": "2023-07-12T15:33:42.129Z",
+      "deletedDate": null
+    },
+    {
+      "id": "8b9c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e",
+      "organizationId": null,
+      "folderId": "f1b45908-5c0a-4f15-88de-4b531a22df58",
+      "type": 1,
+      "name": "Instagram",
+      "notes": null,
+      "favorite": false,
+      "login": {
+        "uris": [
+          {
+            "match": null,
+            "uri": "https://instagram.com"
+          }
+        ],
+        "username": "usuario.insta",
+        "password": "Senha@Forte123",
+        "totp": null
+      },
+      "collectionIds": null,
+      "revisionDate": "2024-10-05T12:34:56.789Z",
+      "creationDate": "2023-04-18T18:22:11.543Z",
+      "deletedDate": null
+    },
+    {
+      "id": "9c0d1e2f-3a4b-5c6d-7e8f-9a0b1c2d3e4f",
+      "organizationId": null,
+      "folderId": null,
+      "type": 1,
+      "name": "Mercado Livre",
+      "notes": "Conta para compras",
+      "favorite": false,
+      "login": {
+        "uris": [
+          {
+            "match": null,
+            "uri": "https://mercadolivre.com.br"
+          }
+        ],
+        "username": "usuario@gmail.com",
+        "password": "MercadoSeguro789!",
+        "totp": null
+      },
+      "collectionIds": null,
+      "revisionDate": "2024-11-15T10:27:33.654Z",
+      "creationDate": "2023-09-05T14:18:22.987Z",
+      "deletedDate": null
+    },
+    {
+      "id": "0d1e2f3a-4b5c-6d7e-8f9a-0b1c2d3e4f5a",
+      "organizationId": null,
+      "folderId": "a9d742cb-7f9a-4d42-8f1a-3181a976def2",
+      "type": 1,
+      "name": "Github",
+      "notes": "Conta de desenvolvimento",
+      "favorite": true,
+      "login": {
+        "uris": [
+          {
+            "match": null,
+            "uri": "https://github.com"
+          }
+        ],
+        "username": "desenvolvedor",
+        "password": "CodigoSeguro2024!@",
+        "totp": "otpauth://totp/Github:desenvolvedor?secret=GITHUB12345&issuer=Github"
+      },
+      "collectionIds": null,
+      "revisionDate": "2025-03-10T15:42:37.876Z",
+      "creationDate": "2023-11-12T09:22:15.432Z",
+      "deletedDate": null
+    }
+  ]
+}

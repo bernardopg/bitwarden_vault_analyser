@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html class="">
+  <head>
+    <title>Vault Analyzer - History</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      window.FontAwesomeConfig = { autoReplaceSvg: "nest" };
+    </script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>"
+    />
+    <style>
+      * {
+        font-family: "Inter", sans-serif;
+        scroll-behavior: smooth;
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+      :root {
+        --color-base-50: #f8fafc;
+        --color-base-100: #f1f5f9;
+        --color-base-200: #e2e8f0;
+        --color-base-300: #cbd5e1;
+        --color-base-400: #94a3b8;
+        --color-base-500: #64748b;
+        --color-base-600: #475569;
+        --color-base-700: #334155;
+        --color-base-800: #1e293b;
+        --color-base-900: #0f172a;
+        --color-base-content: #0f172a;
+        --color-border-base: #e2e8f0;
+        --color-primary: #3b82f6;
+        --color-primary-50: #eff6ff;
+        --color-primary-100: #dbeafe;
+        --color-primary-300: #93c5fd;
+        --color-primary-400: #60a5fa;
+        --color-primary-600: #2563eb;
+        --color-primary-700: #1d4ed8;
+        --color-primary-content: #ffffff;
+        --color-error-400: #f87171;
+        --color-error-500: #ef4444;
+        --color-error-600: #dc2626;
+        --color-error-50: #fef2f2;
+        --color-error-300: #fca5a5;
+        --color-error-700: #b91c1c;
+        --color-warning-400: #fbbf24;
+        --color-warning-600: #d97706;
+        --color-warning-50: #fffbeb;
+        --color-warning-300: #fcd34d;
+        --color-warning-700: #b45309;
+        --color-success-400: #34d399;
+        --color-success-600: #059669;
+        --color-success-50: #ecfdf5;
+        --color-success-300: #6ee7b7;
+        --color-success-700: #047857;
+        --color-info-50: var(--color-primary-50);
+        --color-info-300: var(--color-primary-300);
+        --color-info-700: var(--color-primary-700);
+      }
+      .dark {
+        --color-base-50: #1e293b;
+        --color-base-100: #0f172a;
+        --color-base-200: #1e293b;
+        --color-base-300: #334155;
+        --color-base-400: #475569;
+        --color-base-500: #64748b;
+        --color-base-600: #94a3b8;
+        --color-base-700: #cbd5e1;
+        --color-base-800: #e2e8f0;
+        --color-base-900: #f1f5f9;
+        --color-base-content: #e2e8f0;
+        --color-border-base: #334155;
+        --color-error-400: #fca5a5;
+        --color-error-600: #ef4444;
+        --color-error-50: rgba(185, 28, 28, 0.2);
+        --color-error-300: #fca5a5;
+        --color-error-700: #f87171;
+        --color-warning-400: #fcd34d;
+        --color-warning-600: #f59e0b;
+        --color-warning-50: rgba(180, 83, 9, 0.2);
+        --color-warning-300: #fcd34d;
+        --color-warning-700: #fbbf24;
+        --color-success-400: #6ee7b7;
+        --color-success-600: #10b981;
+        --color-success-50: rgba(4, 120, 87, 0.2);
+        --color-success-300: #a7f3d0;
+        --color-success-700: #34d399;
+        --color-info-50: rgba(29, 78, 216, 0.2);
+        --color-info-300: #93c5fd;
+        --color-info-700: #bfdbfe;
+      }
+      .sidebar-link.active {
+        background-color: var(--color-primary-100);
+        color: var(--color-primary-700);
+        font-weight: 600;
+      }
+      .dark .sidebar-link.active {
+        background-color: var(--color-base-700);
+        color: var(--color-primary-300);
+      }
+    </style>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              transparent: "transparent",
+              current: "currentColor",
+              black: "#000000",
+              white: "#ffffff",
+              gray: { 300: "#d1d5db", 400: "#9ca3af", 500: "#6b7280" },
+              slate: { 800: "#1e293b" },
+              red: {
+                50: "var(--color-error-50)",
+                300: "var(--color-error-300)",
+                400: "var(--color-error-400)",
+                500: "var(--color-error-500)",
+                600: "var(--color-error-600)",
+                700: "var(--color-error-700)",
+              },
+              yellow: {
+                400: "var(--color-warning-400)",
+                600: "var(--color-warning-600)",
+              },
+              green: {
+                400: "var(--color-success-400)",
+                600: "var(--color-success-600)",
+                700: "var(--color-success-700)",
+                50: "var(--color-success-50)",
+                300: "var(--color-success-300)",
+              },
+              blue: {
+                50: "var(--color-info-50)",
+                300: "var(--color-info-300)",
+                400: "var(--color-primary-400)",
+                600: "var(--color-primary-600)",
+                700: "var(--color-info-700)",
+                800: "var(--color-primary-800)",
+              },
+              primary: {
+                DEFAULT: "var(--color-primary)",
+                content: "var(--color-primary-content)",
+                100: "var(--color-primary-100)",
+                700: "var(--color-primary-700)",
+                300: "var(--color-primary-300)",
+              },
+              base: {
+                50: "var(--color-base-50)",
+                100: "var(--color-base-100)",
+                200: "var(--color-base-200)",
+                300: "var(--color-base-300)",
+                400: "var(--color-base-400)",
+                500: "var(--color-base-500)",
+                600: "var(--color-base-600)",
+                700: "var(--color-base-700)",
+                800: "var(--color-base-800)",
+                900: "var(--color-base-900)",
+                DEFAULT: "var(--color-base)",
+                content: "var(--color-base-content)",
+              },
+              "border-base": "var(--color-border-base)",
+            },
+          },
+        },
+        variants: { extend: {} },
+        plugins: [],
+      };
+    </script>
+  </head>
+  <body class="h-full bg-base-50 text-base-content">
+    <div class="min-h-screen">
+      <header
+        id="header"
+        class="bg-slate-800 text-white px-6 py-4 fixed w-full z-50"
+      >
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <a href="{{ url_for('index') }}" class="text-2xl font-bold"
+              >Vault Analyzer</a
+            >
+          </div>
+          <div class="flex items-center space-x-6">
+            <button id="darkModeToggle" class="text-xl">
+              <i class="fa-solid fa-moon"></i>
+            </button>
+            <div class="flex items-center space-x-2 relative">
+              <i class="fa-regular fa-bell text-xl cursor-pointer"></i>
+              <span
+                class="bg-red-500 text-xs rounded-full h-5 w-5 flex items-center justify-center absolute -top-2 -right-2"
+                >3</span
+              >
+            </div>
+            <div class="flex items-center space-x-3 cursor-pointer">
+              <img
+                src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg"
+                alt="User Avatar"
+                class="w-10 h-10 rounded-full border-2 border-gray-300"
+              />
+              <span class="hidden sm:inline">User</span>
+              <i class="fa-solid fa-chevron-down text-xs"></i>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="flex pt-[72px]">
+        <aside
+          id="sidebar"
+          class="w-64 bg-base-100 h-[calc(100vh-72px)] fixed border-r border-border-base overflow-y-auto"
+        >
+          <nav class="p-4">
+            <div class="space-y-6">
+              <div id="main-nav" class="space-y-2">
+                <a
+                  href="{{ url_for('index') }}"
+                  class="sidebar-link flex items-center space-x-3 px-4 py-3 text-base-600 hover:bg-base-200 hover:text-base-900 rounded-lg {% if request.endpoint == 'index' %} active {% endif %}"
+                >
+                  <i class="fa-solid fa-chart-line fa-fw"></i>
+                  <span>Dashboard</span>
+                </a>
+                <a
+                  href="#"
+                  class="flex items-center space-x-3 px-4 py-3 text-base-400 cursor-not-allowed rounded-lg"
+                >
+                  <i class="fa-solid fa-file-waveform fa-fw"></i>
+                  <span>Current Report</span>
+                </a>
+                <a
+                  href="{{ url_for('history') }}"
+                  class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg text-base-600 hover:bg-base-200 hover:text-base-900 {% if request.endpoint == 'history' %} active {% endif %}"
+                >
+                  <i class="fa-solid fa-history fa-fw"></i>
+                  <span>History</span>
+                </a>
+              </div>
+              <div id="tools-nav" class="pt-6 border-t border-border-base">
+                <h3
+                  class="px-4 text-xs font-semibold text-base-500 uppercase tracking-wider"
+                >
+                  Tools
+                </h3>
+                <div class="mt-4 space-y-2">
+                  <a
+                    href="{{ url_for('settings') }}"
+                    class="sidebar-link flex items-center space-x-3 px-4 py-3 text-base-600 hover:bg-base-200 hover:text-base-900 rounded-lg {% if request.endpoint == 'settings' %} active {% endif %}"
+                  >
+                    <i class="fa-solid fa-gear fa-fw"></i>
+                    <span>Settings</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </nav>
+        </aside>
+
+        <main
+          id="main-content"
+          class="flex-1 ml-64 p-6 bg-base-50 overflow-y-auto"
+        >
+          {% with messages = get_flashed_messages(with_categories=true) %} {% if
+          messages %}
+          <div class="mb-4 space-y-2 flash-container">
+            {% for category, message in messages %}
+            <div
+              class="p-4 rounded-md border {% if category == 'error' %}bg-error-50 border-error-300 text-error-700{% elif category == 'success' %}bg-success-50 border-success-300 text-success-700{% else %}bg-info-50 border-info-300 text-info-700{% endif %}"
+              role="alert"
+            >
+              <strong class="font-bold capitalize">{{ category }}!</strong> {{
+              message }}
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %} {% endwith %}
+
+          <div id="page-header" class="mb-6 border-b border-border-base pb-4">
+            <h2 class="text-2xl font-bold text-base-content">
+              Analysis History
+            </h2>
+            <p class="text-base-600 mt-1 text-sm">
+              List of previously performed analyses.
+            </p>
+          </div>
+
+          <div class="bg-base-100 p-6 rounded-lg shadow-sm mb-6">
+            <h3 class="text-lg font-semibold text-base-content mb-4">
+              Security Score Trend
+            </h3>
+            <div class="h-64 flex items-center justify-center">
+              <div id="apex-history-score-chart" class="w-full"></div>
+            </div>
+          </div>
+
+          <div class="bg-base-100 rounded-lg shadow-sm overflow-hidden">
+            <table class="w-full min-w-max text-sm text-left text-base-600">
+              <thead class="text-xs text-base-700 uppercase bg-base-200">
+                <tr>
+                  <th scope="col" class="px-6 py-3">Scan ID</th>
+                  <th scope="col" class="px-6 py-3">Timestamp</th>
+                  <th scope="col" class="px-6 py-3 text-center">Score</th>
+                  <th scope="col" class="px-6 py-3">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-border-base">
+                {% if scans %} {% for scan in scans %}
+                <tr class="hover:bg-base-200">
+                  <td
+                    class="px-6 py-3 font-mono text-base-700"
+                    title="{{ scan.scan_id }}"
+                  >
+                    {{ scan.scan_id[:12] }}...
+                  </td>
+                  <td class="px-6 py-3 text-base-500">{{ scan.timestamp }}</td>
+                  <td
+                    class="px-6 py-3 text-center font-medium {% if scan.score is number and scan.score < 50 %} text-error-600 {% elif scan.score is number and scan.score < 75 %} text-warning-600 {% elif scan.score is number %} text-success-600 {% else %} text-base-400 {% endif %}"
+                  >
+                    {{ scan.score if scan.score is number else 'N/A' }}
+                  </td>
+                  <td class="px-6 py-3">
+                    <a
+                      href="{{ url_for('view_report', scan_id=scan.scan_id) }}"
+                      class="text-primary-600 hover:text-primary-800 font-medium"
+                      >View Report</a
+                    >
+                  </td>
+                </tr>
+                {% endfor %} {% else %}
+                <tr>
+                  <td
+                    colspan="4"
+                    class="px-6 py-4 text-center text-base-500 italic"
+                  >
+                    No analysis history found. Upload a file to start.
+                  </td>
+                </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </main>
+      </div>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const darkModeToggle = document.getElementById("darkModeToggle");
+        const htmlElement = document.documentElement;
+        const applyTheme = () => {
+          const isDark =
+            localStorage.getItem("theme") === "dark" ||
+            (!("theme" in localStorage) &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches);
+          htmlElement.classList.toggle("dark", isDark);
+          darkModeToggle.innerHTML = isDark
+            ? '<i class="fa-solid fa-sun"></i>'
+            : '<i class="fa-solid fa-moon"></i>';
+          renderHistoryChart();
+        };
+        darkModeToggle.addEventListener("click", () => {
+          const isDark = htmlElement.classList.toggle("dark");
+          localStorage.setItem("theme", isDark ? "dark" : "light");
+          applyTheme();
+        });
+        applyTheme();
+
+        const historyChartEl = document.querySelector(
+          "#apex-history-score-chart"
+        );
+        const scansData = JSON.parse("{{ scans | tojson | safe }}");
+
+        function renderHistoryChart() {
+          if (!historyChartEl || !scansData || scansData.length === 0) {
+            if (historyChartEl)
+              historyChartEl.innerHTML =
+                '<p class="text-center text-base-500 italic">No history data to display chart.</p>';
+            return;
+          }
+
+          const isDarkMode =
+            document.documentElement.classList.contains("dark");
+          const gridColor = isDarkMode ? "#334155" : "#e2e8f0";
+          const labelColor = isDarkMode ? "#cbd5e1" : "#475569";
+          const tooltipTheme = isDarkMode ? "dark" : "light";
+
+          const categories = scansData
+            .map((s) => s.timestamp.split(" ")[0])
+            .reverse();
+          const seriesData = scansData
+            .map((s) => (s.score === null ? 0 : s.score))
+            .reverse();
+
+          const options = {
+            series: [{ name: "Security Score", data: seriesData }],
+            chart: {
+              type: "area",
+              height: 250,
+              zoom: { enabled: false },
+              toolbar: {
+                show: true,
+                tools: {
+                  download: true,
+                  selection: false,
+                  zoom: false,
+                  zoomin: false,
+                  zoomout: false,
+                  pan: false,
+                  reset: false,
+                },
+              },
+              animations: {
+                enabled: true,
+                dynamicAnimation: { speed: 350 },
+              },
+            },
+            colors: ["#3b82f6"],
+            dataLabels: { enabled: false },
+            stroke: { curve: "smooth", width: 2 },
+            xaxis: {
+              type: "category",
+              categories: categories,
+              labels: {
+                style: { colors: labelColor },
+                datetimeUTC: false,
+              },
+              tooltip: { enabled: false },
+              axisBorder: { color: gridColor },
+              axisTicks: { color: gridColor },
+            },
+            yaxis: {
+              min: 0,
+              max: 100,
+              labels: {
+                style: { colors: labelColor },
+                formatter: (val) => val.toFixed(0) + "%",
+              },
+            },
+            grid: { borderColor: gridColor },
+            tooltip: {
+              theme: tooltipTheme,
+              x: { format: "yyyy-MM-dd" },
+              y: {
+                formatter: (val) =>
+                  val != null ? val.toFixed(0) + "%" : "N/A",
+              },
+            },
+            fill: {
+              type: "gradient",
+              gradient: {
+                shadeIntensity: 1,
+                opacityFrom: 0.7,
+                opacityTo: 0.3,
+                stops: [0, 90, 100],
+              },
+            },
+          };
+
+          historyChartEl.innerHTML = "";
+          try {
+            const chart = new ApexCharts(historyChartEl, options);
+            chart.render();
+          } catch (e) {
+            console.error("Render history chart:", e);
+            historyChartEl.innerHTML =
+              '<p class="text-center text-error-500 text-xs">Chart Error</p>';
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

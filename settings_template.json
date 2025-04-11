@@ -1,0 +1,6 @@
+{
+  "password_age_years": 1,
+  "check_hibp": true,
+  "analyze_notes_fields": true,
+  "common_passwords_file": null
+}

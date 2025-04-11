@@ -1,0 +1,47 @@
+# Arquivos de cache Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ambientes virtuais
+.venv/
+venv/
+ENV/
+
+# Diretórios de saída
+analysis_results/
+test_analysis_output/
+
+# Arquivos de log
+*.log
+
+# Arquivos de configuração pessoal
+settings.json
+*.env
+
+# Arquivos de exportação Bitwarden que contenham dados sensíveis
+bitwarden-export*.json
+*bitwarden-export*.json
+
+# Arquivos do macOS
+.DS_Store
+
+# Dados de testes
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+
+# Arquivos de distribuição
+.egg-info/
+dist/
+build/
+eggs/
+
+# Arquivos IDE
+.vscode/
+.idea/
+*.swp
+*.swo

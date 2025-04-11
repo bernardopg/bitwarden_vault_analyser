@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html class="">
+  <head>
+    <title>
+      Vault Analyzer - {% if results %}Report {{ results.scan_id[:8] }}{% else
+      %}Dashboard{% endif %}
+    </title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      window.FontAwesomeConfig = { autoReplaceSvg: "nest" };
+    </script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <meta name="scan-id" content="{{ results.scan_id if results else '' }}" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>"
+    />
+    <script id="analysis-data" type="application/json">
+      {{ results | tojson(indent=None) if results else '{}' }}
+    </script>
+    <style>
+      * {
+        font-family: "Inter", sans-serif;
+        scroll-behavior: smooth;
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+      :root {
+        --color-base-50: #f8fafc;
+        --color-base-100: #f1f5f9;
+        --color-base-200: #e2e8f0;
+        --color-base-300: #cbd5e1;
+        --color-base-400: #94a3b8;
+        --color-base-500: #64748b;
+        --color-base-600: #475569;
+        --color-base-700: #334155;
+        --color-base-800: #1e293b;
+        --color-base-900: #0f172a;
+        --color-base-content: #0f172a;
+        --color-border-base: #e2e8f0;
+        --color-primary: #3b82f6;
+        --color-primary-50: #eff6ff;
+        --color-primary-100: #dbeafe;
+        --color-primary-200: #bfdbfe;
+        --color-primary-300: #93c5fd;
+        --color-primary-400: #60a5fa;
+        --color-primary-500: #3b82f6;
+        --color-primary-600: #2563eb;
+        --color-primary-700: #1d4ed8;
+        --color-primary-800: #1e40af;
+        --color-primary-900: #1e3a8a;
+        --color-primary-focus: #2563eb;
+        --color-primary-content: #ffffff;
+        --color-error: #dc2626;
+        --color-error-50: #fef2f2;
+        --color-error-100: #fee2e2;
+        --color-error-300: #fca5a5;
+        --color-error-400: #f87171;
+        --color-error-600: #dc2626;
+        --color-error-700: #b91c1c;
+        --color-error-800: #991b1b;
+        --color-error-content: #ffffff;
+        --color-warning: #d97706;
+        --color-warning-50: #fffbeb;
+        --color-warning-100: #fef3c7;
+        --color-warning-300: #fcd34d;
+        --color-warning-400: #fbbf24;
+        --color-warning-500: #f59e0b;
+        --color-warning-600: #d97706;
+        --color-warning-700: #b45309;
+        --color-warning-800: #92400e;
+        --color-warning-content: #78350f;
+        --color-success: #059669;
+        --color-success-50: #ecfdf5;
+        --color-success-100: #d1fae5;
+        --color-success-300: #6ee7b7;
+        --color-success-400: #34d399;
+        --color-success-600: #059669;
+        --color-success-700: #047857;
+        --color-success-800: #065f46;
+        --color-success-content: #ffffff;
+        --color-info: var(--color-primary);
+        --color-info-50: var(--color-primary-50);
+        --color-info-100: var(--color-primary-100);
+        --color-info-300: var(--color-primary-300);
+        --color-info-400: var(--color-primary-400);
+        --color-info-600: var(--color-primary-600);
+        --color-info-700: var(--color-primary-700);
+        --color-info-content: var(--color-primary-content);
+        --color-orange: #f97316;
+        --color-orange-50: #fff7ed;
+        --color-orange-400: #fb923c;
+        --color-orange-500: #f97316;
+        --color-orange-700: #c2410c;
+        --color-orange-900: #7c2d12;
+        --color-purple: #7c3aed;
+        --color-purple-400: #a78bfa;
+        --color-purple-500: #8b5cf6;
+        --color-purple-600: #7c3aed;
+      }
+      .dark {
+        --color-base-50: #1e293b;
+        --color-base-100: #0f172a;
+        --color-base-200: #1e293b;
+        --color-base-300: #334155;
+        --color-base-400: #475569;
+        --color-base-500: #64748b;
+        --color-base-600: #94a3b8;
+        --color-base-700: #cbd5e1;
+        --color-base-800: #e2e8f0;
+        --color-base-900: #f1f5f9;
+        --color-base-content: #e2e8f0;
+        --color-border-base: #334155;
+        --color-primary-content: #ffffff;
+        --color-error-content: #ffffff;
+        --color-warning-content: #0f172a;
+        --color-success-content: #ffffff;
+        --color-info-content: #ffffff;
+        --color-error-50: rgba(185, 28, 28, 0.2);
+        --color-error-100: rgba(220, 38, 38, 0.3);
+        --color-error-300: #fca5a5;
+        --color-error-400: #f87171;
+        --color-error-600: #ef4444;
+        --color-error-700: #f87171;
+        --color-error-800: #fca5a5;
+        --color-warning-50: rgba(180, 83, 9, 0.2);
+        --color-warning-100: rgba(217, 119, 6, 0.3);
+        --color-warning-300: #fcd34d;
+        --color-warning-400: #fbbf24;
+        --color-warning-600: #f59e0b;
+        --color-warning-700: #fbbf24;
+        --color-warning-800: #fcd34d;
+        --color-success-50: rgba(4, 120, 87, 0.2);
+        --color-success-100: rgba(5, 150, 105, 0.3);
+        --color-success-300: #6ee7b7;
+        --color-success-400: #34d399;
+        --color-success-600: #10b981;
+        --color-success-700: #34d399;
+        --color-success-800: #6ee7b7;
+        --color-info-50: rgba(29, 78, 216, 0.2);
+        --color-info-100: rgba(37, 99, 235, 0.3);
+        --color-info-300: #93c5fd;
+        --color-info-400: #60a5fa;
+        --color-info-600: #3b82f6;
+        --color-info-700: #60a5fa;
+        --color-orange-50: rgba(194, 65, 12, 0.2);
+        --color-orange-400: #fb923c;
+        --color-orange-500: #f97316;
+        --color-orange-700: #fb923c;
+        --color-orange-900: #fdba74;
+        --color-purple-400: #a78bfa;
+        --color-purple-500: #8b5cf6;
+        --color-purple-600: #7c3aed;
+      }
+      .spinner {
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-left-color: #ffffff;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      #analyze-button:disabled .spinner {
+        display: inline-block;
+        margin-left: 8px;
+      }
+      #analyze-button:not(:disabled) .spinner {
+        display: none;
+      }
+      .sidebar-link.active {
+        background-color: var(--color-primary-100);
+        color: var(--color-primary-700);
+        font-weight: 600;
+      }
+      .dark .sidebar-link.active {
+        background-color: var(--color-base-700);
+        color: var(--color-primary-300);
+      }
+    </style>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              transparent: "transparent",
+              current: "currentColor",
+              black: "#000000",
+              white: "#ffffff",
+              gray: {
+                50: "#f9fafb",
+                100: "#f3f4f6",
+                200: "#e5e7eb",
+                300: "#d1d5db",
+                400: "#9ca3af",
+                500: "#6b7280",
+                600: "#4b5563",
+                700: "#374151",
+                800: "#1f2937",
+                900: "#111827",
+              },
+              slate: {
+                50: "#f8fafc",
+                100: "#f1f5f9",
+                200: "#e2e8f0",
+                300: "#cbd5e1",
+                400: "#94a3b8",
+                500: "#64748b",
+                600: "#475569",
+                700: "#334155",
+                800: "#1e293b",
+                900: "#0f172a",
+              },
+              red: {
+                50: "#fef2f2",
+                100: "#fee2e2",
+                200: "#fecaca",
+                300: "#fca5a5",
+                400: "#f87171",
+                500: "#ef4444",
+                600: "#dc2626",
+                700: "#b91c1c",
+                800: "#991b1b",
+                900: "#7f1d1d",
+              },
+              yellow: {
+                50: "#fffbeb",
+                100: "#fef3c7",
+                200: "#fde68a",
+                300: "#fcd34d",
+                400: "#fbbf24",
+                500: "#f59e0b",
+                600: "#d97706",
+                700: "#b45309",
+                800: "#92400e",
+                900: "#78350f",
+              },
+              amber: { 700: "#b45309" },
+              green: {
+                50: "#ecfdf5",
+                100: "#d1fae5",
+                200: "#a7f3d0",
+                300: "#6ee7b7",
+                400: "#34d399",
+                500: "#10b981",
+                600: "#059669",
+                700: "#047857",
+                800: "#065f46",
+                900: "#064e3b",
+              },
+              emerald: { 700: "#047857" },
+              blue: {
+                50: "#eff6ff",
+                100: "#dbeafe",
+                200: "#bfdbfe",
+                300: "#93c5fd",
+                400: "#60a5fa",
+                500: "#3b82f6",
+                600: "#2563eb",
+                700: "#1d4ed8",
+                800: "#1e40af",
+                900: "#1e3a8a",
+              },
+              purple: {
+                400: "var(--color-purple-400)",
+                500: "var(--color-purple-500)",
+                600: "var(--color-purple-600)",
+              },
+              orange: {
+                50: "var(--color-orange-50)",
+                400: "var(--color-orange-400)",
+                500: "var(--color-orange-500)",
+                700: "var(--color-orange-700)",
+                900: "var(--color-orange-900)",
+              },
+              primary: {
+                50: "var(--color-primary-50)",
+                100: "var(--color-primary-100)",
+                200: "var(--color-primary-200)",
+                300: "var(--color-primary-300)",
+                400: "var(--color-primary-400)",
+                500: "var(--color-primary-500)",
+                600: "var(--color-primary-600)",
+                700: "var(--color-primary-700)",
+                800: "var(--color-primary-800)",
+                900: "var(--color-primary-900)",
+                DEFAULT: "var(--color-primary)",
+                focus: "var(--color-primary-focus)",
+                content: "var(--color-primary-content)",
+              },
+              error: {
+                50: "var(--color-error-50)",
+                100: "var(--color-error-100)",
+                300: "var(--color-error-300)",
+                400: "var(--color-error-400)",
+                500: "var(--color-error-500)",
+                600: "var(--color-error-600)",
+                700: "var(--color-error-700)",
+                800: "var(--color-error-800)",
+                DEFAULT: "var(--color-error)",
+                content: "var(--color-error-content)",
+              },
+              warning: {
+                50: "var(--color-warning-50)",
+                100: "var(--color-warning-100)",
+                300: "var(--color-warning-300)",
+                400: "var(--color-warning-400)",
+                500: "var(--color-warning-500)",
+                600: "var(--color-warning-600)",
+                700: "var(--color-warning-700)",
+                800: "var(--color-warning-800)",
+                DEFAULT: "var(--color-warning)",
+                content: "var(--color-warning-content)",
+              },
+              success: {
+                50: "var(--color-success-50)",
+                100: "var(--color-success-100)",
+                300: "var(--color-success-300)",
+                400: "var(--color-success-400)",
+                500: "var(--color-success-500)",
+                600: "var(--color-success-600)",
+                700: "var(--color-success-700)",
+                800: "var(--color-success-800)",
+                DEFAULT: "var(--color-success)",
+                content: "var(--color-success-content)",
+              },
+              info: {
+                50: "var(--color-info-50)",
+                100: "var(--color-info-100)",
+                300: "var(--color-info-300)",
+                400: "var(--color-info-400)",
+                600: "var(--color-info-600)",
+                700: "var(--color-info-700)",
+                DEFAULT: "var(--color-info)",
+                content: "var(--color-info-content)",
+              },
+              base: {
+                50: "var(--color-base-50)",
+                100: "var(--color-base-100)",
+                200: "var(--color-base-200)",
+                300: "var(--color-base-300)",
+                400: "var(--color-base-400)",
+                500: "var(--color-base-500)",
+                600: "var(--color-base-600)",
+                700: "var(--color-base-700)",
+                800: "var(--color-base-800)",
+                900: "var(--color-base-900)",
+                DEFAULT: "var(--color-base)",
+                content: "var(--color-base-content)",
+              },
+              "border-base": "var(--color-border-base)",
+            },
+          },
+        },
+        variants: {
+          extend: {
+            backgroundColor: ["active", "group-hover"],
+            textColor: ["active", "group-hover"],
+          },
+        },
+        plugins: [require("@tailwindcss/forms")],
+      };
+    </script>
+  </head>
+
+  <body class="h-full text-base-content bg-base-50">
+    <div class="min-h-screen">
+      <header
+        id="header"
+        class="bg-slate-800 text-white px-6 py-4 fixed w-full z-50"
+      >
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <a href="{{ url_for('index') }}" class="text-2xl font-bold"
+              >Vault Analyzer</a
+            >
+          </div>
+          <div class="flex items-center space-x-6">
+            <button id="darkModeToggle" class="text-xl">
+              <i class="fa-solid fa-moon"></i>
+            </button>
+            <div class="flex items-center space-x-2 relative">
+              <i class="fa-regular fa-bell text-xl cursor-pointer"></i>
+              <span
+                class="bg-red-500 text-xs rounded-full h-5 w-5 flex items-center justify-center absolute -top-2 -right-2"
+                >3</span
+              >
+            </div>
+            <div class="flex items-center space-x-3 cursor-pointer">
+              <img
+                src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg"
+                alt="User Avatar"
+                class="w-10 h-10 rounded-full border-2 border-gray-300"
+              />
+              <span class="hidden sm:inline">User</span>
+              <i class="fa-solid fa-chevron-down text-xs"></i>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="flex pt-[72px]">
+        <aside
+          id="sidebar"
+          class="w-64 bg-base-100 h-[calc(100vh-72px)] fixed border-r border-border-base overflow-y-auto"
+        >
+          <nav class="p-4">
+            <div class="space-y-6">
+              <div id="main-nav" class="space-y-2">
+                <a
+                  href="{{ url_for('index') }}"
+                  class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg text-base-600 hover:bg-base-200 hover:text-base-900 {% if request.endpoint == 'index' %} active {% endif %}"
+                >
+                  <i class="fa-solid fa-chart-line fa-fw"></i>
+                  <span>Dashboard</span>
+                </a>
+                <a
+                  href="{{ url_for('view_report', scan_id=results.scan_id) if results else '#' }}"
+                  class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg {% if results %}{% if request.endpoint == 'view_report' %} active {% else %} text-base-600 hover:bg-base-200 hover:text-base-900 {% endif %}{% else %} text-base-400 cursor-not-allowed {% endif %}"
+                  {%
+                  if
+                  not
+                  results
+                  %}
+                  aria-disabled="true"
+                  {%
+                  endif
+                  %}
+                >
+                  <i class="fa-solid fa-file-waveform fa-fw"></i>
+                  <span>Current Report</span>
+                </a>
+                <a
+                  href="{{ url_for('history') }}"
+                  class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg text-base-600 hover:bg-base-200 hover:text-base-900 {% if request.endpoint == 'history' %} active {% endif %}"
+                >
+                  <i class="fa-solid fa-history fa-fw"></i>
+                  <span>History</span>
+                </a>
+              </div>
+              {% if results %}
+              <div id="secondary-nav" class="pt-6 border-t border-border-base">
+                <h3
+                  class="px-4 text-xs font-semibold text-base-500 uppercase tracking-wider"
+                >
+                  Report Sections
+                </h3>
+                <div class="mt-4 space-y-2">
+                  <a
+                    href="#key-findings-summary"
+                    class="sidebar-link flex items-center space-x-3 px-4 py-3 text-base-600 hover:bg-base-200 hover:text-base-900 rounded-lg"
+                  >
+                    <i class="fa-solid fa-star fa-fw"></i>
+                    <span>Key Findings</span>
+                  </a>
+                  <a
+                    href="#password-strength-table"
+                    class="sidebar-link flex items-center space-x-3 px-4 py-3 text-base-600 hover:bg-base-200 hover:text-base-900 rounded-lg"
+                  >
+                    <i class="fa-solid fa-shield-halved fa-fw"></i>
+                    <span>Password Strength</span>
+                  </a>
+                  <a
+                    href="#reused-passwords-table"
+                    class="sidebar-link flex items-center space-x-3 px-4 py-3 text-base-600 hover:bg-base-200 hover:text-base-900 rounded-lg"
+                  >
+                    <i class="fa-solid fa-copy fa-fw"></i>
+                    <span>Reused Passwords</span>
+                  </a>
+                  <a
+                    href="#other-issues-table"
+                    class="sidebar-link flex items-center space-x-3 px-4 py-3 text-base-600 hover:bg-base-200 hover:text-base-900 rounded-lg"
+                  >
+                    <i class="fa-solid fa-triangle-exclamation fa-fw"></i>
+                    <span>Other Issues</span>
+                  </a>
+                  {% if results.details.secrets_in_notes %}
+                  <a
+                    href="#secrets-notes-table"
+                    class="sidebar-link flex items-center space-x-3 px-4 py-3 text-base-600 hover:bg-base-200 hover:text-base-900 rounded-lg"
+                  >
+                    <i class="fa-solid fa-user-secret fa-fw"></i>
+                    <span>Secrets in Notes</span>
+                  </a>
+                  {% endif %} {% if results.details.secrets_in_fields %}
+                  <a
+                    href="#secrets-fields-table"
+                    class="sidebar-link flex items-center space-x-3 px-4 py-3 text-base-600 hover:bg-base-200 hover:text-base-900 rounded-lg"
+                  >
+                    <i class="fa-solid fa-key fa-fw"></i>
+                    <span>Secrets in Fields</span>
+                  </a>
+                  {% endif %}
+                </div>
+              </div>
+              {% endif %}
+              <div id="tools-nav" class="pt-6 border-t border-border-base">
+                <h3
+                  class="px-4 text-xs font-semibold text-base-500 uppercase tracking-wider"
+                >
+                  Tools
+                </h3>
+                <div class="mt-4 space-y-2">
+                  <a
+                    href="{{ url_for('settings') }}"
+                    class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg text-base-600 hover:bg-base-200 hover:text-base-900 {% if request.endpoint == 'settings' %} active {% endif %}"
+                  >
+                    <i class="fa-solid fa-gear fa-fw"></i>
+                    <span>Settings</span>
+                  </a>
+                  {% if results %}
+                  <a
+                    href="{{ url_for('export_csv', scan_id=results.scan_id) }}"
+                    class="sidebar-link flex items-center space-x-3 px-4 py-3 text-base-600 hover:bg-base-200 hover:text-base-900 rounded-lg"
+                  >
+                    <i class="fa-solid fa-file-csv fa-fw"></i>
+                    <span>Export CSV</span>
+                  </a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </nav>
+        </aside>
+
+        <main
+          id="main-content"
+          class="flex-1 ml-64 p-6 bg-base-50 overflow-y-auto"
+        >
+          {% with messages = get_flashed_messages(with_categories=true) %} {% if
+          messages %}
+          <div class="mb-4 space-y-2 flash-container">
+            {% for category, message in messages %}
+            <div
+              class="p-4 rounded-md border {% if category == 'error' %}bg-error-50 border-error-300 text-error-700{% elif category == 'success' %}bg-success-50 border-success-300 text-success-700{% else %}bg-info-50 border-info-300 text-info-700{% endif %}"
+              role="alert"
+            >
+              <strong class="font-bold capitalize">{{ category }}!</strong> {{
+              message }}
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %} {% endwith %}
+
+          <div
+            id="analysis-form-section"
+            class="bg-base-100 p-6 rounded-lg shadow-sm mb-6"
+          >
+            <h3 class="text-lg font-semibold text-base-content mb-4">
+              Upload Bitwarden JSON Export
+            </h3>
+            <form
+              id="analyze-form"
+              action="{{ url_for('analyze') }}"
+              method="POST"
+              enctype="multipart/form-data"
+            >
+              <input
+                type="file"
+                id="vault-file-input"
+                name="vault_file"
+                accept=".json"
+                style="display: none"
+              />
+
+              <div
+                id="drop-zone"
+                class="mb-4 border-2 border-dashed border-base-300 rounded-lg p-8 text-center cursor-pointer hover:border-primary-500 hover:bg-primary-50 transition-colors duration-200"
+              >
+                <div
+                  class="flex flex-col items-center justify-center pointer-events-none"
+                >
+                  <i
+                    class="fa-solid fa-file-arrow-up text-4xl text-base-400 mb-3"
+                  ></i>
+                  <p class="text-base-600 font-medium">
+                    Drop your Bitwarden Export (.json) here
+                  </p>
+                  <p class="text-sm text-base-500 mt-1">or</p>
+                </div>
+                <button
+                  type="button"
+                  id="browse-button"
+                  class="mt-3 px-4 py-2 bg-base-100 text-base-content border border-base-600 rounded-lg hover:bg-base-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 focus:ring-offset-base-100 text-sm font-medium"
+                >
+                  Browse File
+                </button>
+              </div>
+
+              <div id="selected-file-display" class="mb-4 text-sm hidden">
+                <span class="font-medium text-base-700">Selected File:</span>
+                <span
+                  id="selected-file-name"
+                  class="ml-2 inline-block bg-base-200 text-base-800 px-3 py-1 rounded font-mono"
+                ></span>
+                <button
+                  type="button"
+                  id="reset-button"
+                  class="ml-2 text-error-500 hover:text-error-700 text-xs"
+                  title="Clear selection"
+                >
+                  (Clear)
+                </button>
+              </div>
+
+              <button
+                type="submit"
+                id="analyze-button"
+                disabled
+                class="w-full px-4 py-2 bg-primary-600 text-primary-content rounded-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 focus:ring-offset-base-100 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <i class="fa-solid fa-play"></i>
+                <span id="analyze-button-text">Analyze Selected File</span>
+                <div class="spinner" style="display: none"></div>
+              </button>
+            </form>
+          </div>
+
+          <div id="page-header" class="mb-6 border-b border-border-base pb-4">
+            <h2 class="text-2xl font-bold text-base-content">
+              {% if results %} Analysis Report:
+              <span class="font-mono text-xl text-base-700"
+                >{{ results.scan_id[:8] }}...</span
+              >
+              {% else %} Dashboard Overview {% endif %}
+            </h2>
+            <p class="text-base-600 mt-1 text-sm">
+              {% if results %} Results for uploaded vault export. Analyzed:
+              <span class="font-medium text-base-800"
+                >{{ results.timestamp }}</span
+              >
+              <span class="mx-2 text-base-300">|</span>
+              Duration:
+              <span class="font-medium text-base-800"
+                >{{ results.summary.get('analysis_duration_sec', 'N/A')
+                }}s</span
+              >
+              {% else %} Upload a Bitwarden JSON export file above to start the
+              analysis. {% endif %}
+            </p>
+          </div>
+
+          {% if results %}
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6"
+          >
+            <div
+              class="bg-base-100 p-5 rounded-lg shadow-sm border-l-4 border-blue-500"
+            >
+              <h3 class="font-semibold text-base-600 text-sm mb-2">
+                Security Score
+              </h3>
+              <div class="text-4xl font-bold text-base-content">
+                {{ results.summary.get('security_score', 'N/A') }}{% if
+                results.summary.get('security_score') is number %}%{% endif %}
+              </div>
+              <p class="text-xs text-base-500 mt-1">Overall vault health</p>
+            </div>
+            <div
+              class="bg-base-100 p-5 rounded-lg shadow-sm border-l-4 border-error-500"
+            >
+              <h3 class="font-semibold text-base-600 text-sm mb-2">
+                Critical Issues
+              </h3>
+              <div class="text-4xl font-bold text-error-600">
+                {{ results.summary.get('critical_issues', 'N/A') }}
+              </div>
+              <p class="text-xs text-base-500 mt-1">
+                Pwned / Reused / Weak / Secrets
+              </p>
+            </div>
+            <div
+              class="bg-base-100 p-5 rounded-lg shadow-sm border-l-4 border-warning-500"
+            >
+              <h3 class="font-semibold text-base-600 text-sm mb-2">Warnings</h3>
+              <div class="text-4xl font-bold text-warning-600">
+                {{ results.summary.get('warnings', 'N/A') }}
+              </div>
+              <p class="text-xs text-base-500 mt-1">
+                No 2FA / HTTP URIs / Old Pass
+              </p>
+            </div>
+            <div
+              class="bg-base-100 p-5 rounded-lg shadow-sm border-l-4 border-purple-500"
+            >
+              <h3 class="font-semibold text-base-600 text-sm mb-2">
+                Total Logins / Items
+              </h3>
+              <div class="text-4xl font-bold text-purple-600">
+                {{ results.summary.get('total_logins', 'N/A') }} / {{
+                results.summary.get('total_items', 'N/A') }}
+              </div>
+              <p class="text-xs text-base-500 mt-1">
+                Logins vs All vault items
+              </p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <div class="bg-base-100 p-6 rounded-lg shadow-sm">
+              <h3 class="text-lg font-semibold text-base-content mb-4">
+                Password Strength Distribution
+              </h3>
+              <div class="h-64 flex items-center justify-center">
+                <div id="apex-vuln-chart" class="w-full"></div>
+              </div>
+            </div>
+            <div class="bg-base-100 p-6 rounded-lg shadow-sm">
+              <h3 class="text-lg font-semibold text-base-content mb-4">
+                Security Score Trend (Recent)
+              </h3>
+              <div class="h-64 flex items-center justify-center">
+                <div id="apex-score-chart" class="w-full"></div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            id="key-findings-summary"
+            class="bg-base-100 p-6 rounded-lg shadow-sm mb-6"
+          >
+            <h3 class="text-lg font-semibold text-base-content mb-4">
+              Key Findings & Recommendations
+            </h3>
+            <div class="space-y-4">
+              {% if results.findings %} {% for finding in results.findings %}
+              <div
+                class="flex items-start space-x-4 p-4 rounded-r-lg border-l-4 {% if finding.level == 'Critical' %}bg-error-50 border-error-400 {% elif finding.level == 'High' %}bg-orange-50 border-orange-400 {% elif finding.level == 'Warning' %}bg-warning-50 border-warning-400 {% else %}bg-info-50 border-info-400{% endif %}"
+              >
+                <div
+                  class="mt-1 text-xl {% if finding.level == 'Critical' %}text-error-500 {% elif finding.level == 'High' %}text-orange-500 {% elif finding.level == 'Warning' %}text-warning-500 {% else %}text-info-500{% endif %}"
+                >
+                  <i
+                    class="fa-solid {% if finding.type == 'Pwned Passwords' or finding.type == 'Exposed Secrets' %}fa-skull-crossbones{% elif finding.level == 'Critical' or finding.level == 'High' %}fa-circle-exclamation{% elif finding.level == 'Warning' %}fa-triangle-exclamation{% else %}fa-info-circle{% endif %} fa-fw"
+                  ></i>
+                </div>
+                <div class="flex-1">
+                  <h4
+                    class="font-semibold {% if finding.level == 'Critical' %}text-error-700 {% elif finding.level == 'High' %}text-orange-700 {% elif finding.level == 'Warning' %}text-warning-700 {% else %}text-info-700{% endif %}"
+                  >
+                    {{ finding.title }}
+                  </h4>
+                  <p class="text-base-700 mt-1 text-sm break-words">
+                    {{ finding.description }}
+                  </p>
+                  {% if finding.recommendation %}
+                  <p class="text-base-800 mt-2 text-sm">
+                    <span class="font-medium">Recommendation:</span> {{
+                    finding.recommendation }}
+                  </p>
+                  {% endif %}
+                </div>
+              </div>
+              {% endfor %} {% elif results.summary.critical_issues == 0 and
+              results.summary.warnings == 0 %}
+              <div
+                class="flex items-center space-x-3 p-4 rounded-lg bg-success-50 border-l-4 border-success-400"
+              >
+                <i
+                  class="fa-solid fa-check-circle text-xl text-success-500 fa-fw"
+                ></i>
+                <p class="text-success-700 font-medium">
+                  Excellent! No significant issues found in your vault data.
+                </p>
+              </div>
+              {% else %}
+              <p class="text-base-500 italic p-4">
+                No specific key findings to highlight. Review details below.
+              </p>
+              {% endif %}
+            </div>
+          </div>
+
+          <div
+            id="password-strength-table"
+            class="bg-base-100 rounded-lg shadow-sm mb-6"
+          >
+            <div class="p-6 border-b border-border-base">
+              <h3 class="text-lg font-semibold text-base-content">
+                Password Strength Details
+              </h3>
+              <p class="text-sm text-base-500 mt-1">
+                Analysis of password complexity for login items (weakest first).
+                <i
+                  class="fas fa-skull-crossbones text-error-600 ml-2"
+                  title="Password found in data breaches!"
+                ></i>
+                indicates pwned password.
+              </p>
+            </div>
+            <div class="overflow-x-auto max-h-96">
+              <table class="w-full min-w-max text-sm text-left text-base-600">
+                <thead
+                  class="text-xs text-base-700 uppercase bg-base-200 sticky top-0 z-10"
+                >
+                  <tr>
+                    <th scope="col" class="px-6 py-3">Item Name</th>
+                    <th scope="col" class="px-6 py-3">Username</th>
+                    <th scope="col" class="px-6 py-3 text-center">
+                      Strength Level
+                    </th>
+                    <th scope="col" class="px-6 py-3">Issues Found</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-border-base">
+                  {% if results.details and results.details.password_analysis %}
+                  {% for item_analysis in results.details.password_analysis %}
+                  {% set row_bg = '' %} {% if item_analysis.is_pwned or
+                  item_analysis.strength == 'Very Weak' or
+                  item_analysis.strength == 'Weak' %} {% set row_bg =
+                  'bg-error-50' %} {% elif item_analysis.strength == 'Fair' %}
+                  {% set row_bg = 'bg-warning-50' %} {% endif %} {% set
+                  pwn_count_str = '' %} {% if item_analysis.is_pwned and
+                  item_analysis.issues %} {% for issue in item_analysis.issues
+                  %} {% if issue.startswith('Password pwned (') %} {% set parts
+                  = issue.split('(') %} {% if parts | length > 1 %} {% set
+                  count_part = parts[1].split(',')[0] %} {% set pwn_count_str =
+                  count_part.strip() %} {% endif %} {% endif %} {% endfor %} {%
+                  endif %}
+                  <tr class="hover:bg-base-200 {{ row_bg }}">
+                    <td
+                      class="px-6 py-2 font-medium text-base-900 whitespace-nowrap"
+                      title="{{ item_analysis.id }}"
+                    >
+                      {{ item_analysis.name | truncate(50, True) }} {% if
+                      item_analysis.is_pwned %}
+                      <i
+                        class="fas fa-skull-crossbones text-error-600 ml-2"
+                        title="Password found in data breaches! ({{ pwn_count_str }} times)"
+                      ></i>
+                      {% endif %}
+                    </td>
+                    <td class="px-6 py-2 text-base-500 whitespace-nowrap">
+                      {{ item_analysis.username | truncate(40, True) if
+                      item_analysis.username else '-' }}
+                    </td>
+                    <td class="px-6 py-2 text-center">
+                      {% set strength_level = item_analysis.strength %}
+                      <span
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {% if strength_level == 'Very Weak' or strength_level == 'Weak' or item_analysis.is_pwned %}bg-error-100 text-error-800 {% elif strength_level == 'Fair' %}bg-warning-100 text-warning-800 {% elif strength_level == 'Good' or strength_level == 'Strong' %}bg-success-100 text-success-800 {% else %}bg-base-200 text-base-600{% endif %}"
+                      >
+                        {{ strength_level }}
+                      </span>
+                    </td>
+                    <td class="px-6 py-2 text-xs text-base-500">
+                      {{ item_analysis.issues | join('; ') | truncate(100, True)
+                      if item_analysis.issues else '-' }}
+                    </td>
+                  </tr>
+                  {% endfor %} {% else %}
+                  <tr>
+                    <td
+                      colspan="4"
+                      class="px-6 py-4 text-center text-base-500 italic"
+                    >
+                      No password analysis data available.
+                    </td>
+                  </tr>
+                  {% endif %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div
+            id="reused-passwords-table"
+            class="bg-base-100 rounded-lg shadow-sm mb-6"
+          >
+            <div class="p-6 border-b border-border-base">
+              <h3 class="text-lg font-semibold text-error-600">
+                Reused Passwords ({{ results.summary.reused_passwords_count }}
+                groups)
+              </h3>
+              <p class="text-sm text-base-500 mt-1">
+                Passwords used across multiple login items. This is a critical
+                security risk.
+              </p>
+            </div>
+            <div class="overflow-x-auto max-h-96">
+              <table class="w-full min-w-max text-sm text-left text-base-600">
+                <thead
+                  class="text-xs text-base-700 uppercase bg-error-50 sticky top-0 z-10"
+                >
+                  <tr>
+                    <th scope="col" class="px-6 py-3"># Items</th>
+                    <th scope="col" class="px-6 py-3">
+                      Items Sharing Password
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-border-base">
+                  {% if results.details and results.details.reused_passwords %}
+                  {% for reuse_info in results.details.reused_passwords |
+                  sort(attribute='count', reverse=true) %}
+                  <tr class="hover:bg-error-100/50">
+                    <td
+                      class="px-6 py-2 font-mono text-center font-bold text-error-700"
+                    >
+                      {{ reuse_info.count }}
+                    </td>
+                    <td class="px-6 py-2 text-xs">
+                      {{ reuse_info.get('items', []) | join(', ') |
+                      truncate(250, True) }}
+                    </td>
+                  </tr>
+                  {% endfor %} {% else %}
+                  <tr>
+                    <td
+                      colspan="2"
+                      class="px-6 py-4 text-center text-success-700 italic"
+                    >
+                      Good! No reused passwords found.
+                    </td>
+                  </tr>
+                  {% endif %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div
+            id="other-issues-table"
+            class="bg-base-100 rounded-lg shadow-sm mb-6"
+          >
+            <div class="p-6 border-b border-border-base">
+              <h3 class="text-lg font-semibold text-warning-700">
+                Other Potential Issues ({{ results.summary.warnings }})
+              </h3>
+              <p class="text-sm text-base-500 mt-1">
+                Items missing 2FA, using insecure URIs (HTTP), or with old
+                passwords (>1yr).
+              </p>
+            </div>
+            <div class="overflow-x-auto max-h-96">
+              <table class="w-full min-w-max text-sm text-left text-base-600">
+                <thead
+                  class="text-xs text-base-700 uppercase bg-warning-50 sticky top-0 z-10"
+                >
+                  <tr>
+                    <th scope="col" class="px-6 py-3">Item Name</th>
+                    <th scope="col" class="px-6 py-3">Issue Type</th>
+                    <th scope="col" class="px-6 py-3">
+                      Details / Recommendation
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-border-base">
+                  {% set other_issues_list = [] %} {% for item in
+                  results.details.password_analysis if not item.has_totp %} {%
+                  set _ = other_issues_list.append({'name': item.name, 'id':
+                  item.id, 'type': 'No 2FA', 'details': 'Enable Two-Factor
+                  Authentication for better security.', 'sort_key': 'A'}) %} {%
+                  endfor %} {% if results.details.insecure_uris %} {% for item
+                  in results.details.insecure_uris %} {% set _ =
+                  other_issues_list.append({'name': item.name, 'id': item.id,
+                  'type': 'Insecure URI', 'details': 'Update URI to HTTPS if
+                  available. Current: ' ~ item.uri | truncate(60, True),
+                  'sort_key': 'B'}) %} {% endfor %} {% endif %} {% if
+                  results.details.old_passwords %} {% for item in
+                  results.details.old_passwords %} {% set _ =
+                  other_issues_list.append({'name': item.name, 'id': item.id,
+                  'type': 'Old Password', 'details': 'Consider updating
+                  password. Last revised: ' ~ item.revisionDate.split('T')[0],
+                  'sort_key': 'C'}) %} {% endfor %} {% endif %} {% if
+                  other_issues_list %} {% for issue in other_issues_list |
+                  sort(attribute='sort_key') | sort(attribute='name') %}
+                  <tr class="hover:bg-warning-100/50">
+                    <td
+                      class="px-6 py-2 font-medium text-base-900 whitespace-nowrap"
+                      title="{{issue.id}}"
+                    >
+                      {{ issue.name | truncate(50, True) }}
+                    </td>
+                    <td class="px-6 py-2">
+                      <span
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-warning-100 text-warning-800"
+                        >{{ issue.type }}</span
+                      >
+                    </td>
+                    <td class="px-6 py-2 text-xs text-base-500">
+                      {{ issue.details }}
+                    </td>
+                  </tr>
+                  {% endfor %} {% else %}
+                  <tr>
+                    <td
+                      colspan="3"
+                      class="px-6 py-4 text-center text-success-700 italic"
+                    >
+                      Good! No issues found in this category (2FA, HTTP URIs,
+                      Old Passwords).
+                    </td>
+                  </tr>
+                  {% endif %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {% if results.details.secrets_in_notes %}
+          <div
+            id="secrets-notes-table"
+            class="bg-base-100 rounded-lg shadow-sm mb-6"
+          >
+            <div class="p-6 border-b border-border-base">
+              <h3 class="text-lg font-semibold text-error-600">
+                Potential Secrets Found in Secure Notes ({{
+                results.summary.secrets_in_notes_count }})
+              </h3>
+              <p class="text-sm text-base-500 mt-1">
+                Potential API keys, passwords, or private keys found in note
+                fields. Review urgently.
+              </p>
+            </div>
+            <div class="overflow-x-auto max-h-96">
+              <table class="w-full min-w-max text-sm text-left text-base-600">
+                <thead
+                  class="text-xs text-base-700 uppercase bg-error-50 sticky top-0 z-10"
+                >
+                  <tr>
+                    <th scope="col" class="px-6 py-3">Note Name</th>
+                    <th scope="col" class="px-6 py-3">Finding Type</th>
+                    <th scope="col" class="px-6 py-3">Line</th>
+                    <th scope="col" class="px-6 py-3">Context</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-border-base">
+                  {% for item in results.details.secrets_in_notes |
+                  sort(attribute='name') %} {% for finding in item.findings %}
+                  <tr class="hover:bg-error-100/50">
+                    <td
+                      class="px-6 py-2 font-medium text-base-900 whitespace-nowrap"
+                      title="{{item.id}}"
+                    >
+                      {{ item.name | truncate(50, True) }}
+                    </td>
+                    <td class="px-6 py-2 text-xs">{{ finding.finding }}</td>
+                    <td class="px-6 py-2 text-xs">{{ finding.line_num }}</td>
+                    <td class="px-6 py-2 text-xs font-mono text-error-700">
+                      {{ finding.context }}
+                    </td>
+                  </tr>
+                  {% endfor %} {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          {% endif %} {% if results.details.secrets_in_fields %}
+          <div
+            id="secrets-fields-table"
+            class="bg-base-100 rounded-lg shadow-sm mb-6"
+          >
+            <div class="p-6 border-b border-border-base">
+              <h3 class="text-lg font-semibold text-error-600">
+                Potential Secrets Found in Custom Fields ({{
+                results.summary.secrets_in_fields_count }})
+              </h3>
+              <p class="text-sm text-base-500 mt-1">
+                Potential API keys, passwords, or private keys found in custom
+                fields. Review urgently.
+              </p>
+            </div>
+            <div class="overflow-x-auto max-h-96">
+              <table class="w-full min-w-max text-sm text-left text-base-600">
+                <thead
+                  class="text-xs text-base-700 uppercase bg-error-50 sticky top-0 z-10"
+                >
+                  <tr>
+                    <th scope="col" class="px-6 py-3">Item Name</th>
+                    <th scope="col" class="px-6 py-3">Field Name</th>
+                    <th scope="col" class="px-6 py-3">Finding Type</th>
+                    <th scope="col" class="px-6 py-3">Line</th>
+                    <th scope="col" class="px-6 py-3">Context</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-border-base">
+                  {% for item in results.details.secrets_in_fields |
+                  sort(attribute='name') %} {% for finding in item.findings %}
+                  <tr class="hover:bg-error-100/50">
+                    <td
+                      class="px-6 py-2 font-medium text-base-900 whitespace-nowrap"
+                      title="{{item.id}}"
+                    >
+                      {{ item.name | truncate(40, True) }}
+                    </td>
+                    <td class="px-6 py-2 text-xs font-semibold">
+                      {{ item.field_name | truncate(30, True) }}
+                    </td>
+                    <td class="px-6 py-2 text-xs">{{ finding.finding }}</td>
+                    <td class="px-6 py-2 text-xs">{{ finding.line_num }}</td>
+                    <td class="px-6 py-2 text-xs font-mono text-error-700">
+                      {{ finding.context }}
+                    </td>
+                  </tr>
+                  {% endfor %} {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          {% endif %} {% else %}
+          <div
+            class="bg-base-100 p-10 rounded-lg shadow-sm text-center border border-border-base"
+          >
+            <i class="fa-solid fa-upload text-6xl text-base-300 mb-6"></i>
+            <p class="text-xl text-base-600 font-medium">
+              Upload your Bitwarden Export
+            </p>
+            <p class="text-base-500 text-sm mt-2">
+              Use the form above to upload your unencrypted JSON export file to
+              start the analysis.
+            </p>
+          </div>
+          {% endif %}
+        </main>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const dataScript = document.getElementById("analysis-data");
+        let analysisData = {};
+        try {
+          analysisData = JSON.parse(dataScript.textContent || "{}");
+        } catch (e) {
+          console.error("Error parsing analysis data:", e);
+          analysisData = {};
+        }
+        const chartData = analysisData.chart_data || {};
+
+        function renderCharts(chartData) {
+          const isDarkMode =
+            document.documentElement.classList.contains("dark");
+          const gridColor = isDarkMode ? "#334155" : "#e2e8f0";
+          const labelColor = isDarkMode ? "#cbd5e1" : "#475569";
+          const tooltipTheme = isDarkMode ? "dark" : "light";
+
+          const defaultOptions = {
+            chart: {
+              height: 250,
+              type: "line",
+              zoom: { enabled: false },
+              toolbar: { show: false },
+              animations: { enabled: true, dynamicAnimation: { speed: 350 } },
+            },
+            dataLabels: { enabled: false },
+            stroke: { curve: "smooth", width: 3 },
+            markers: { size: 0 },
+            xaxis: {
+              categories: [],
+              labels: { style: { colors: labelColor } },
+              axisBorder: { color: gridColor },
+              axisTicks: { color: gridColor },
+            },
+            yaxis: { min: 0, labels: { style: { colors: labelColor } } },
+            legend: { show: false, labels: { colors: labelColor } },
+            grid: { borderColor: gridColor, padding: { left: 0, right: 10 } },
+            tooltip: { theme: tooltipTheme },
+          };
+
+          let scoreOptions = {
+            ...defaultOptions,
+            series: [{ name: "Score", data: [] }],
+            colors: [isDarkMode ? "#94a3b8" : "#cbd5e1"],
+            markers: { size: 0 },
+            yaxis: {
+              ...defaultOptions.yaxis,
+              max: 100,
+              labels: {
+                ...defaultOptions.yaxis.labels,
+                formatter: (val) => (val != null ? val.toFixed(0) + "%" : "0%"),
+              },
+            },
+          };
+          if (
+            analysisData.summary &&
+            analysisData.summary.security_score !== undefined
+          ) {
+            scoreOptions.series = [
+              { name: "Score", data: [analysisData.summary.security_score] },
+            ];
+            scoreOptions.xaxis.categories = [
+              analysisData.timestamp
+                ? analysisData.timestamp.split(" ")[0]
+                : "Current",
+            ];
+            scoreOptions.colors = ["#3b82f6"];
+            scoreOptions.markers.size = 5;
+          }
+
+          let vulnOptions = {
+            ...defaultOptions,
+            chart: { ...defaultOptions.chart, type: "donut", height: 270 },
+            series: [1],
+            labels: ["No Data"],
+            colors: [isDarkMode ? "#475569" : "#cbd5e1"],
+            legend: {
+              ...defaultOptions.legend,
+              show: true,
+              position: "bottom",
+            },
+            dataLabels: {
+              enabled: true,
+              formatter: (val, opts) => opts.w.globals.series[opts.seriesIndex],
+            },
+            plotOptions: {
+              pie: {
+                donut: {
+                  labels: {
+                    show: true,
+                    total: {
+                      show: true,
+                      label: "Total",
+                      color: labelColor,
+                      formatter: (w) => 0,
+                    },
+                  },
+                },
+              },
+            },
+            responsive: [
+              {
+                breakpoint: 480,
+                options: {
+                  chart: { width: 200 },
+                  legend: { position: "bottom" },
+                },
+              },
+            ],
+          };
+          if (
+            chartData &&
+            chartData.vulnerability_distribution &&
+            chartData.vulnerability_distribution.series &&
+            chartData.vulnerability_distribution.series.length > 0 &&
+            chartData.vulnerability_distribution.series.some((v) => v > 0)
+          ) {
+            vulnOptions.series = chartData.vulnerability_distribution.series;
+            vulnOptions.labels =
+              chartData.vulnerability_distribution.labels || [];
+            vulnOptions.colors = [
+              "#ef4444",
+              "#f59e0b",
+              "#a3e635",
+              "#10b981",
+              "#64748b",
+            ];
+            vulnOptions.plotOptions.pie.donut.labels.total.label =
+              "Total Logins";
+            vulnOptions.plotOptions.pie.donut.labels.total.formatter = (w) =>
+              w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+          } else if (
+            analysisData.summary &&
+            analysisData.summary.total_logins > 0
+          ) {
+            vulnOptions.labels = ["Error/Unknown"];
+            vulnOptions.plotOptions.pie.donut.labels.total.formatter = (w) =>
+              analysisData.summary.total_logins || 0;
+          }
+
+          const scoreChartEl = document.querySelector("#apex-score-chart");
+          if (scoreChartEl) {
+            scoreChartEl.innerHTML = "";
+            try {
+              new ApexCharts(scoreChartEl, scoreOptions).render();
+            } catch (e) {
+              console.error("Render score chart:", e);
+              scoreChartEl.innerHTML =
+                '<p class="text-center text-error-500 text-xs">Chart Error</p>';
+            }
+          }
+          const vulnChartEl = document.querySelector("#apex-vuln-chart");
+          if (vulnChartEl) {
+            vulnChartEl.innerHTML = "";
+            try {
+              new ApexCharts(vulnChartEl, vulnOptions).render();
+            } catch (e) {
+              console.error("Render vuln chart:", e);
+              vulnChartEl.innerHTML =
+                '<p class="text-center text-error-500 text-xs">Chart Error</p>';
+            }
+          }
+        }
+
+        const darkModeToggle = document.getElementById("darkModeToggle");
+        const htmlElement = document.documentElement;
+        const applyTheme = () => {
+          const isDark =
+            localStorage.getItem("theme") === "dark" ||
+            (!("theme" in localStorage) &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches);
+          htmlElement.classList.toggle("dark", isDark);
+          darkModeToggle.innerHTML = isDark
+            ? '<i class="fa-solid fa-sun"></i>'
+            : '<i class="fa-solid fa-moon"></i>';
+          renderCharts(chartData);
+        };
+        darkModeToggle.addEventListener("click", () => {
+          const isDark = htmlElement.classList.toggle("dark");
+          localStorage.setItem("theme", isDark ? "dark" : "light");
+          applyTheme();
+        });
+        applyTheme();
+
+        const dropZone = document.getElementById("drop-zone");
+        const browseButton = document.getElementById("browse-button");
+        const fileInput = document.getElementById("vault-file-input");
+        const selectedDisplay = document.getElementById(
+          "selected-file-display"
+        );
+        const selectedName = document.getElementById("selected-file-name");
+        const analyzeButton = document.getElementById("analyze-button");
+        const analyzeButtonText = document.getElementById(
+          "analyze-button-text"
+        );
+        const analyzeForm = document.getElementById("analyze-form");
+        const resetButton = document.getElementById("reset-button");
+        const spinner = analyzeButton.querySelector(".spinner");
+
+        function handleFileSelection(file) {
+          if (file && file.name.toLowerCase().endsWith(".json")) {
+            selectedName.textContent = file.name;
+            selectedDisplay.classList.remove("hidden");
+            analyzeButton.disabled = false;
+            spinner.style.display = "none";
+            analyzeButtonText.textContent = "Analyze Selected File";
+            dropZone.classList.remove("border-error-500", "bg-error-50");
+            dropZone.classList.add("border-success-500", "bg-success-50");
+          } else {
+            resetSelection();
+            if (file) {
+              flashMessage("Please select a valid .json file.", "error");
+              dropZone.classList.add("border-error-500", "bg-error-50");
+            }
+          }
+        }
+
+        function resetSelection() {
+          selectedName.textContent = "";
+          selectedDisplay.classList.add("hidden");
+          analyzeButton.disabled = true;
+          spinner.style.display = "none";
+          analyzeButtonText.textContent = "Analyze Selected File";
+          fileInput.value = "";
+          dropZone.classList.remove(
+            "border-success-500",
+            "bg-success-50",
+            "border-error-500",
+            "bg-error-50",
+            "bg-primary-100",
+            "border-primary-600"
+          );
+        }
+
+        function flashMessage(message, type = "info") {
+          let flashContainer = document.querySelector(".flash-container");
+          if (!flashContainer) {
+            flashContainer = document.createElement("div");
+            flashContainer.className = "mb-4 space-y-2 flash-container";
+            const formSection = document.getElementById(
+              "analysis-form-section"
+            );
+            formSection.parentNode.insertBefore(flashContainer, formSection);
+          }
+          const alertDiv = document.createElement("div");
+          alertDiv.className = `p-4 rounded-md border ${
+            type === "error"
+              ? "bg-error-50 border-error-300 text-error-700"
+              : type === "success"
+              ? "bg-success-50 border-success-300 text-success-700"
+              : "bg-info-50 border-info-300 text-info-700"
+          }`;
+          alertDiv.setAttribute("role", "alert");
+          alertDiv.innerHTML = `<strong class="font-bold capitalize">${type}!</strong> ${message}`;
+          flashContainer.appendChild(alertDiv);
+          setTimeout(() => {
+            if (alertDiv && alertDiv.parentNode) alertDiv.remove();
+          }, 5000);
+        }
+
+        browseButton.addEventListener("click", () => fileInput.click());
+        fileInput.addEventListener("change", (event) =>
+          handleFileSelection(event.target.files[0])
+        );
+        resetButton.addEventListener("click", resetSelection);
+        dropZone.addEventListener("dragenter", (e) => {
+          e.preventDefault();
+          dropZone.classList.add("bg-primary-100", "border-primary-600");
+        });
+        dropZone.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = "copy";
+          dropZone.classList.add("bg-primary-100", "border-primary-600");
+        });
+        dropZone.addEventListener("dragleave", (e) => {
+          e.preventDefault();
+          dropZone.classList.remove("bg-primary-100", "border-primary-600");
+        });
+        dropZone.addEventListener("drop", (event) => {
+          event.preventDefault();
+          dropZone.classList.remove("bg-primary-100", "border-primary-600");
+          resetSelection();
+          const files = event.dataTransfer.files;
+          if (files && files.length > 0) {
+            if (files[0].name.toLowerCase().endsWith(".json")) {
+              const MAX_SIZE_MB = 25;
+              if (files[0].size > MAX_SIZE_MB * 1024 * 1024) {
+                flashMessage(
+                  `File is too large (max ${MAX_SIZE_MB}MB).`,
+                  "error"
+                );
+                dropZone.classList.add("border-error-500", "bg-error-50");
+                return;
+              }
+              fileInput.files = files;
+              handleFileSelection(files[0]);
+            } else {
+              flashMessage("Only .json files are accepted.", "error");
+              dropZone.classList.add("border-error-500", "bg-error-50");
+            }
+          } else {
+            const items = event.dataTransfer.items;
+            if (
+              items &&
+              items.length > 0 &&
+              items[0].webkitGetAsEntry?.().isDirectory
+            ) {
+              flashMessage("Please drop a .json FILE, not a folder.", "error");
+              dropZone.classList.add("border-error-500", "bg-error-50");
+            }
+          }
+        });
+        dropZone.addEventListener("click", (event) => {
+          if (!browseButton.contains(event.target)) {
+            fileInput.click();
+          }
+        });
+        analyzeForm.addEventListener("reset", resetSelection);
+        analyzeForm.addEventListener("submit", (e) => {
+          if (analyzeButton.disabled) {
+            e.preventDefault();
+            return;
+          }
+          analyzeButton.disabled = true;
+          spinner.style.display = "inline-block";
+          analyzeButtonText.textContent = "Analyzing...";
+        });
+
+        const sidebarLinks = document.querySelectorAll(
+          "#secondary-nav .sidebar-link"
+        );
+        sidebarLinks.forEach((link) => {
+          link.addEventListener("click", (e) => {
+            const targetId = link.getAttribute("href");
+            if (targetId && targetId.startsWith("#")) {
+              e.preventDefault();
+              const targetElement = document.querySelector(targetId);
+              if (targetElement) {
+                targetElement.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                });
+              }
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
