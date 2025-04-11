@@ -54,7 +54,7 @@
 2. **Clone o Repositório (Opcional):**
 
    ```bash
-   git clone <url-do-repositório>
+   git clone https://github.com/bernardopg/bitwarden_vault_analyser
    cd bitwarden_vault_analyser
    ```
 
@@ -200,7 +200,7 @@ Este projeto está licenciado sob a Licença MIT - veja a seção [License](#-li
 2. **Clone the Repository (Optional):**
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/bernardopg/bitwarden_vault_analyser
    cd bitwarden_vault_analyser
    ```
 
